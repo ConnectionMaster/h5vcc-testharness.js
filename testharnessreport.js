@@ -374,6 +374,12 @@ var metadata_generator = {
     },
 
     setup: function() {
+        add_start_callback(
+            function (properties) {
+                if (window.testRunner) {
+                    window.testRunner.waitUntilDone();
+                }
+            });
         add_completion_callback(
             function (tests, harness_status) {
                 metadata_generator.process(tests, harness_status);
@@ -396,6 +402,9 @@ function dump_test_results(tests, status) {
             stack: status.stack};
     results_element.textContent = JSON.stringify(data);
     document.documentElement.lastChild.appendChild(results_element);
+    if (window.testRunner) {
+        window.testRunner.notifyDone();
+    }
 }
 
 metadata_generator.setup();
